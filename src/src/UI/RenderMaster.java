@@ -6,7 +6,7 @@ import java.util.List;
 
  public class RenderMaster
  {
-     public void render(Graphics g, Ball ball, Paddle paddle, List<Brick> bricks)
+     public void render(Graphics g, Ball ball, Paddle paddle, List<Brick> bricks, GameState gameState)
      {
          // TODO нарисовать фон
 
@@ -18,6 +18,35 @@ import java.util.List;
          drawPaddle(g, paddle);
 
          drawBall(g, ball);
+
+         switch(gameState)
+         {
+             case MENU:
+                 drawOverlay(g, "ARCANOID", "Press ENTER to Start", gameState);
+                 break;
+             case PAUSED:
+                 drawOverlay(g, "PAUSED", "Press ESC to Resume", gameState);
+                 break;
+             case GAME_OVER:
+                 drawOverlay(g, "GAME OVER", "Press R to Restart", gameState);
+                 break;
+         }
+     }
+
+     private void drawOverlay(Graphics g, String title, String subtitle, GameState gameState)
+     {
+         g.setColor(new Color(0, 0, 0, 150));
+         g.fillRect(0,0,600,400);
+
+         g.setColor(Color.white);
+         g.setFont(new Font("Arial", Font.BOLD, 40));
+
+         if (GameState.PAUSED == gameState) g.drawString(title, 225, 200);
+         if (GameState.GAME_OVER == gameState) g.drawString(title, 190, 200);
+         if (GameState.MENU == gameState) g.drawString(title, 200, 200);
+
+         g.setFont(new Font("Arial", Font.PLAIN, 20));
+         g.drawString(subtitle, 210, 230);
      }
 
      private void drawBricks(Graphics g, Brick brick)
