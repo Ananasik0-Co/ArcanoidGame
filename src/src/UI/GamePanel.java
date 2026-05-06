@@ -18,11 +18,13 @@ public class GamePanel extends JPanel implements ActionListener {
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
+    private int score;
 
     private Timer timer;
     private RenderMaster render;
     private PhysicsEngine physics;
     private InputHandler input;
+
 
     private GameState currentState = GameState.MENU;
 
@@ -37,13 +39,15 @@ public class GamePanel extends JPanel implements ActionListener {
 
         addKeyListener(input);
 
-        // Создаем объекты
         ball = new Ball(WIDTH / 2, HEIGHT - 100, 15, Color.YELLOW);
         paddle = new Paddle(250, HEIGHT - 30, 100, 15, Color.CYAN);
+
+
         initLevel();
 
         timer = new Timer(16, this);
         timer.start();
+
     }
 
     private void initLevel() {
@@ -59,7 +63,7 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        render.render(g, ball, paddle, bricks,  currentState);
+        render.render(g, ball, paddle, bricks,  currentState, score);
     }
 
     @Override
@@ -70,7 +74,7 @@ public class GamePanel extends JPanel implements ActionListener {
         {
             handleInput();
 
-            physics.update(ball, paddle, bricks);
+            score += physics.update(ball, paddle, bricks);
 
             checkGameOver();
         }
@@ -111,6 +115,8 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private void restartGame()
     {
+        score  = 0;
+
         ball =  new Ball(WIDTH / 2, HEIGHT - 100, 15, Color.YELLOW);
         paddle =  new Paddle(250, HEIGHT - 30, 100, 15, Color.CYAN);
         initLevel();

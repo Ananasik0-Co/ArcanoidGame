@@ -4,9 +4,10 @@ import entities.*;
 import java.awt.*;
 import java.util.List;
 
+
  public class RenderMaster
  {
-     public void render(Graphics g, Ball ball, Paddle paddle, List<Brick> bricks, GameState gameState)
+     public void render(Graphics g, Ball ball, Paddle paddle, List<Brick> bricks, GameState gameState, int score)
      {
          // TODO нарисовать фон
 
@@ -18,6 +19,10 @@ import java.util.List;
          drawPaddle(g, paddle);
 
          drawBall(g, ball);
+
+         g.setColor(Color.WHITE);
+         g.setFont(new Font("Arial", Font.BOLD, 18));
+         g.drawString("Score: " + score, 20, 30);
 
          switch(gameState)
          {

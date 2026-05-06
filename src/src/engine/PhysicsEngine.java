@@ -7,24 +7,24 @@ public class PhysicsEngine {
 
     private final int width;
     private final int height;
+    public int score = 0;
 
     public PhysicsEngine(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
-    public void update(Ball ball, Paddle paddle, List<Brick> bricks) {
-        // 1. Движение
+    public int update(Ball ball, Paddle paddle, List<Brick> bricks) {
+
         ball.move();
 
-        // 2. Столкновение со стенами
         checkWallCollisions(ball);
 
-        // 3. Столкновение с платформой
         checkPaddleCollision(ball, paddle);
 
-        // 4. Столкновение с кирпичами
         checkBrickCollisions(ball, bricks);
+
+        return checkBrickCollisions(ball, bricks);
     }
 
     private void checkWallCollisions(Ball ball) {
@@ -38,20 +38,34 @@ public class PhysicsEngine {
 
     private void checkPaddleCollision(Ball ball, Paddle paddle) {
         if (ball.getBounds().intersects(paddle.getBounds())) {
-            ball.reverseY();
-            // Важно: выталкиваем мяч, чтобы он не "залип" в платформе
-            // ball.setY(paddle.getY() - ball.getHeight());
+
+            ball.setY(paddle.getY() - ball.getHeight());
+
+            double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
+            double ballCenter = ball.getX() + ball.getWidth() / 2.0;
+            double relativeHit = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0);
+
+            double baseSpeed = 7.0;
+            double maxAngleFactor = 0.75;
+
+            double newDX = relativeHit * (baseSpeed * maxAngleFactor);
+            double newDY = Math.sqrt(baseSpeed * baseSpeed - newDX * newDX);
+
+            ball.setDX(newDX);
+            ball.setDY(-newDY);
         }
     }
 
-    private void checkBrickCollisions(Ball ball, List<Brick> bricks) {
+    private int checkBrickCollisions(Ball ball, List<Brick> bricks) {
         for (int i = 0; i < bricks.size(); i++) {
             Brick b = bricks.get(i);
             if (ball.getBounds().intersects(b.getBounds())) {
                 ball.reverseY();
                 bricks.remove(i);
-                break;
+                score += 10;
+                return 1;
             }
         }
+        return 0;
     }
 }
