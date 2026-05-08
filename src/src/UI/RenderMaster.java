@@ -4,7 +4,6 @@ import entities.*;
 import java.awt.*;
 import java.util.List;
 
-
  public class RenderMaster
  {
      public void render(Graphics g, Ball ball, Paddle paddle, List<Brick> bricks, GameState gameState, int score)

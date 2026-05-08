@@ -7,14 +7,18 @@ public class PhysicsEngine {
 
     private final int width;
     private final int height;
-    public int score = 0;
+    public int score;
 
     public PhysicsEngine(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
-    public int update(Ball ball, Paddle paddle, List<Brick> bricks) {
+    public int getScore() {return score;}
+
+    public void setScore(int score) {this.score = score;}
+
+    public void update(Ball ball, Paddle paddle, List<Brick> bricks) {
 
         ball.move();
 
@@ -24,14 +28,20 @@ public class PhysicsEngine {
 
         checkBrickCollisions(ball, bricks);
 
-        return checkBrickCollisions(ball, bricks);
     }
 
     private void checkWallCollisions(Ball ball) {
-        if (ball.getX() <= 0 || ball.getX() >= width - ball.getWidth()) {
+
+        if (ball.getX() <= 0) {
+            ball.setX(0);
+            ball.reverseX();
+        } else if (ball.getX() >= width - ball.getWidth()) {
+            ball.setX(width - ball.getWidth());
             ball.reverseX();
         }
+        // Потолок
         if (ball.getY() <= 0) {
+            ball.setY(0);
             ball.reverseY();
         }
     }
@@ -56,16 +66,17 @@ public class PhysicsEngine {
         }
     }
 
-    private int checkBrickCollisions(Ball ball, List<Brick> bricks) {
-        for (int i = 0; i < bricks.size(); i++) {
+    private void checkBrickCollisions(Ball ball, List<Brick> bricks)
+    {
+        for (int i = 0; i < bricks.size(); i++)
+        {
             Brick b = bricks.get(i);
-            if (ball.getBounds().intersects(b.getBounds())) {
+            if (ball.getBounds().intersects(b.getBounds()))
+            {
                 ball.reverseY();
                 bricks.remove(i);
                 score += 10;
-                return 1;
             }
         }
-        return 0;
     }
 }

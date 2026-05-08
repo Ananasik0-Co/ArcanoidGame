@@ -10,10 +10,10 @@ public class Main {
         JFrame frame = new JFrame("The Arcanoid Game");
         GamePanel panel = new GamePanel();
         frame.add(panel);
-        frame.pack(); // Подгонит размер окна под панель
+        frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null); // Окно по центру экрана
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

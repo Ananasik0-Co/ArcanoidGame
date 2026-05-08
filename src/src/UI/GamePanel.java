@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
-    private int score;
+
 
     private Timer timer;
     private RenderMaster render;
@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        render.render(g, ball, paddle, bricks,  currentState, score);
+        render.render(g, ball, paddle, bricks,  currentState, physics.getScore());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements ActionListener {
         {
             handleInput();
 
-            score += physics.update(ball, paddle, bricks);
+            physics.update(ball, paddle, bricks);
 
             checkGameOver();
         }
@@ -115,7 +115,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private void restartGame()
     {
-        score  = 0;
+        physics.setScore(0);
 
         ball =  new Ball(WIDTH / 2, HEIGHT - 100, 15, Color.YELLOW);
         paddle =  new Paddle(250, HEIGHT - 30, 100, 15, Color.CYAN);
